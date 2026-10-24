@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<application xmlns="http://ns.adobe.com/air/application/51.1">
+
+  <id>WR3DFree</id>
+
+  <versionNumber>1.750.64</versionNumber>
+
+  <architecture>64</architecture>
+
+  <filename>Wrestling Revolution 3D</filename>
+
+  <description>Wrestling sim.</description>
+
+<name>Wrestling Revolution 3D</name>
+
+ <copyright>MDickie 2014</copyright>
+
+  <initialWindow>
+    <content>Game.swf</content>
+    <systemChrome>standard</systemChrome>
+    <transparent>false</transparent>
+    <visible>true</visible>
+    <fullScreen>true</fullScreen>
+    <aspectRatio>landscape</aspectRatio>
+ <autoOrients>true</autoOrients>
+
+    <renderMode>direct</renderMode> 
+<depthAndStencil>true</depthAndStencil>
+    
+    <maximizable>true</maximizable>
+    <minimizable>true</minimizable>
+    <resizable>true</resizable>
+  </initialWindow>
+
+  
+<icon>
+    
+<image36x36>Icons/36x36.png</image36x36>
+    
+<image48x48>Icons/48x48.png</image48x48>
+    
+<image72x72>Icons/72x72.png</image72x72>
+    
+<image96x96>Icons/96x96.png</image96x96>
+    
+<image144x144>Icons/144x144.png</image144x144>
+    
+</icon>
+
+  
+<customUpdateUI>false</customUpdateUI>
+
+  <allowBrowserInvocation>false</allowBrowserInvocation>
+
+
+<android>
+<manifestAdditions><![CDATA[
+<manifest android:installLocation="auto">
+<uses-sdk android:targetSdkVersion="35"/>
+<uses-sdk android:minSdkVersion="24"/>
+<uses-feature android:name="android.hardware.touchscreen" android:required="false"/>
+<uses-permission android:name="android.permission.INTERNET"/>
+<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+<uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+<uses-permission android:name="android.permission.WAKE_LOCK"/>
+<uses-permission android:name="com.android.vending.BILLING" />
+<uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+<uses-permission android:name="android.permission.INTERACT_ACROSS_USERS_FULL"/>
+
+<queries>
+        <intent>
+            <action android:name="com.android.vending.billing.InAppBillingService.BIND" />
+        </intent>
+    </queries>
+
+<application android:largeHeap="true" android:hardwareAccelerated="true">
+
+<meta-data android:name="android.max_aspect" android:value="2.16" />
+			
+<activity 
+            android:name="com.distriqt.extension.inappbilling.activities.ProductViewActivity" 
+            android:exported="false"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+
+        <meta-data android:name="com.google.android.play.billingclient.version" android:value="6.2.1" />
+        <activity
+            android:name="com.android.billingclient.api.ProxyBillingActivity"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:exported="false"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+        <activity
+            android:name="com.android.billingclient.api.ProxyBillingActivityV2"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:exported="false"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+
+<meta-data
+                        android:name="com.google.android.gms.ads.APPLICATION_ID"
+                        android:value="ca-app-pub-5784311004955543~6424618449"/>
+
+                    <!-- AppLovin SDK Key (required by Yodo1 MAS) -->
+                    <meta-data
+                        android:name="applovin.sdk.key"
+                        android:value="xcGD2fy-GdmiZQapx_kUSy5SMKyLoXBk8RyB5u9MVv34KetGdbl4XrXvAUFy0Qg9scKyVTI0NM4i_yzdXih4XE"/>
+
+ 
+   </application>
+
+
+</manifest>
+]]></manifestAdditions>
+</android>
+
+<extensions>
+<extensionID>com.distriqt.InAppBilling</extensionID>
+    <extensionID>com.distriqt.Core</extensionID>
+    <extensionID>com.distriqt.playservices.Base</extensionID>
+    <extensionID>com.google.android.play</extensionID>
+<extensionID>com.AdobeAir.Yodo1Mas</extensionID>
+  </extensions>
+
+</application>
