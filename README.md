@@ -1,57 +1,80 @@
-# WR3D — rebuild
+# WR3D Rebuild
 
-Cross-platform rebuild of **Wrestling Revolution 3D** (`air.WR3DFree` 1.750.64) as a browser game and a Roblox experience.
+A 3D wrestling game rebuilt from first principles — one verified mechanics core
+shared by a browser build and a Roblox build.
 
-Reverse-engineered from the shipped APK: Adobe AIR / Flare3D, 137,493 lines of ActionScript in one frame script, 393 classes, 300-character roster. Every mechanic in `docs/` is cited to a source line.
+**[▶ Play in the browser](https://pantha704.github.io/wr3d/)** *(live after first deploy)*
 
-## Layout
+![grey-box](docs/greybox-screenshot.png)
+
+## What makes this different
+
+The simulation is **numerically specified**, not vibes. Every formula carries a
+line citation into the reference analysis (`docs/WR3D-FULL-SPEC.md` — 5,947
+lines, 271 citations), and both the TypeScript and Luau implementations must
+reproduce the same conformance suite:
+
+```bash
+pnpm --dir web test                        # 13 tests, 210 vectors
+lune run roblox/tests/conformance.luau     # 213 assertions, same vectors
+```
+
+Change a formula on one platform and CI fails on the other. That is the whole
+trick.
+
+## Structure
 
 ```
-docs/       mechanics spec (source of truth), build plan, investigation log
-shared/     roster + conformance vectors shared by both platforms
-web/        Vite + TypeScript + Three.js
-roblox/     Rojo + Luau project
-tools/      extractors and vector generator
+web/        Vite + TypeScript + Three.js (browser build)
+roblox/     Rojo + Luau (Roblox build)
+shared/     generated roster + conformance vectors (the contract)
+docs/       mechanics spec, build plan, implementation plan
+tools/      roster parser/generator, vector generator
+private/    reference-only data, gitignored, never shipped
+```
+
+## Design decisions
+
+| Decision | Why |
+|---|---|
+| Fixed **18 Hz** sim tick, render interpolates | the reference engine is frame-locked; a variable timestep breaks parity |
+| One seeded PRNG (`mulberry32`) | reproducible matches, testable, identical on both platforms |
+| `Rnd(min,max) = round(rnd*(max-min))+min` | matches the reference distribution — endpoints get half weight |
+| 1-indexed stat arrays at the boundary only | mirrors the reference, 0-indexed internally |
+| No backend, no telemetry | static hosting, saves in IndexedDB, nothing to breach |
+| Generated roster | original IP only — see `NOTICE` |
+
+## Local development
+
+```bash
+pnpm --dir web install
+pnpm --dir web dev        # http://127.0.0.1:5173
+
+rojo serve roblox/default.project.json   # then connect from Roblox Studio
+
+python3 tools/gen_roster.py              # regenerate the shipped roster
+python3 tools/gen_vectors.py             # regenerate conformance vectors
 ```
 
 ## Status
 
 | Milestone | State |
 |---|---|
-| 0 — repo, spec, data, vectors | **done** |
-| 1 — headless sim core, vectors green | next |
-| 2 — web grey-box prototype | |
-| 3 — full match sandbox | |
-| 4 — menus, save, career economy | |
-| 5 — Roblox parity (vectors green in Luau) | |
-| 6 — art pass | |
+| Mechanics spec | ✅ 271 citations |
+| Sim core (web + Luau) | ✅ conformance green |
+| Original roster | ✅ 300 generated wrestlers |
+| Playable match | 🚧 next |
+| Public deploy | 🚧 workflow ready |
+| Art pass | 🚧 capsules |
 
-## What is already extracted
+Roadmap, risk register and quality gates: [`docs/PLAN.md`](docs/PLAN.md).
 
-- **Roster** — 300 characters × 335 fields, schema recovered by porting the shipped loader; parser asserts zero drift (`tools/roster_parse.py`).
-- **Stats** — `1 Popularity · 2 Strength · 3 Skill · 4 Agility · 5 Stamina · 6 Toughness · 7 Attitude · 8 Happiness`.
-- **Match engine** — 10,000 HP default, nose-to-nose hit geometry (no to-hit roll), poise pool as the knockdown gate, per-frame stat rescaling, 3-count pins at 18 fps.
-- **Economy** — bank, wages, `worth = chunk³/15`, contract filters, manager cut, event ledger.
-- **Progression** — generation algorithm, training, ageing, injury model.
-- **Conformance vectors** — 210 values across 6 formula families (`shared/vectors`).
+## Contributing
 
-## Non-negotiable porting rules
+Read `CONTRIBUTING.md` — the short version: both platforms must pass the same
+vectors in the same PR, and no third-party game data is accepted (`NOTICE`).
 
-1. The sim runs at a **fixed 18 Hz** tick; render interpolates.
-2. `Rnd(min,max)` = `Math.round(rng() * (max - min)) + min` — endpoints get **half weight**. Use one seeded PRNG (`mulberry32`), never `Math.random()`.
-3. Source arrays are **1-indexed**; convert at the boundary only.
-4. Web and Roblox must both pass `shared/vectors/conformance.json` **exactly**. Any drift is a bug in the port, not a design choice.
+## License
 
-## Quickstart
-
-```bash
-# web
-pnpm --dir web install && pnpm --dir web dev
-
-# roblox
-rojo serve roblox/default.project.json   # then connect from Studio
-
-# data + vectors
-python3 tools/roster_parse.py            # regenerate roster
-python3 tools/gen_vectors.py             # regenerate conformance vectors
-```
+Code and vectors: MIT (`LICENSE`). No assets or roster data from any commercial
+game are included.

@@ -7,3 +7,6 @@ dist/
 .DS_Store
 __pycache__/
 *.pyc
+
+# reference data from the analysed binary — never shipped (see NOTICE)
+private/

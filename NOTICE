@@ -1,0 +1,36 @@
+# NOTICE
+
+## What this repository contains
+
+Original code: the TypeScript simulation core, the Luau mirror, the build
+tooling, the test suite, and the written mechanics analysis.
+
+## What it does not contain
+
+- No code from *Wrestling Revolution 3D* or any other MDickie product.
+- No assets — no meshes, textures, audio, fonts, or animation data.
+- No character roster from the original game. The extracted roster is used
+  locally as a format reference only and is excluded from this repository
+  (see `private/`, gitignored). What ships is a procedurally generated,
+  entirely original roster.
+
+## On the mechanics analysis in `docs/`
+
+`docs/WR3D-FULL-SPEC.md` is factual analysis of a publicly distributed binary
+that the maintainers obtained and inspected on their own devices: line-cited
+observations of numeric behaviour (damage formulas, economy tables, timing).
+Game mechanics and rules are not protected by copyright; specific expression
+(code, art, names, audio) is. None of the protected expression is reproduced
+here.
+
+## Trademarks
+
+Any product names referenced in the analysis are the property of their
+respective owners and are used descriptively. This project is not affiliated
+with, endorsed by, or sponsored by any of them.
+
+## Contributing
+
+By contributing you agree your contribution is licensed under the MIT license
+in `LICENSE`, and that you will not submit assets or data copied from a
+commercial game.
