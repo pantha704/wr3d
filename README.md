@@ -3,7 +3,7 @@
 A 3D wrestling game rebuilt from first principles — one verified mechanics core
 shared by a browser build and a Roblox build.
 
-**[▶ Play in the browser](https://pantha704.github.io/wr3d/)** *(live after first deploy)*
+**[▶ Play in the browser](https://pantha704.github.io/wr3d/)** · no install, works on phones
 
 ![playable](docs/playable.png)
 
@@ -63,9 +63,9 @@ python3 tools/gen_vectors.py             # regenerate conformance vectors
 | Mechanics spec | ✅ 271 citations |
 | Sim core (web + Luau) | ✅ conformance green |
 | Original roster | ✅ 300 generated wrestlers |
-| Playable match | ✅ keyboard + AI, deterministic (17 tests) |
-| Public deploy | 🚧 workflow ready, waiting on remote |
-| Art pass | 🚧 capsules |
+| Playable match | ✅ keyboard + touch + AI, deterministic |
+| Public deploy | ✅ live on GitHub Pages, CI green |
+| Art pass | 🚧 capsules (M6) |
 
 Roadmap, risk register and quality gates: [`docs/PLAN.md`](docs/PLAN.md).
 

@@ -33,12 +33,12 @@
 
 | # | Milestone | Definition of done |
 |---|---|---|
-| **M0** | Repo & license hygiene | LICENSE + NOTICE + SECURITY + CONTRIBUTING; IP-bearing data out of the public tree |
-| **M1** | Original roster | seeded generator produces 300 original wrestlers; IP guard test proves no name collision with the extracted roster |
-| **M2** | Playable match | keyboard/touch input, movement, strike/grapple resolution, AI opponent, match end + result screen |
-| **M3** | Public shell | responsive layout, a11y (focus, aria-live HUD, reduced-motion), error boundary, how-to-play, offline-capable |
-| **M4** | Deploy | GitHub Pages workflow green from `main`; production URL serves M2 build |
-| **M5** | Roblox parity | same vectors green in Luau in CI; `rojo build` artifact downloadable |
+| **M0** ✅ | Repo & license hygiene | LICENSE + NOTICE + SECURITY + CONTRIBUTING; IP-bearing data out of the public tree |
+| **M1** ✅ | Original roster | seeded generator produces 300 original wrestlers; IP guard test proves no name collision with the extracted roster |
+| **M2** ✅ | Playable match | keyboard/touch input, movement, strike/grapple resolution, AI opponent, match end + result screen |
+| **M3** ✅ | Public shell | responsive layout, a11y (focus, aria-live HUD, reduced-motion), error boundary, how-to-play, offline-capable |
+| **M4** ✅ | Deploy | GitHub Pages workflow green from `main`; production URL serves M2 build |
+| **M5** ✅ | Roblox parity | same vectors green in Luau in CI; `rojo build` artifact downloadable |
 | **M6** | Art pass | original rig + animations, replace capsules |
 
 ## 3. Risk register — every countermeasure we will actually implement
