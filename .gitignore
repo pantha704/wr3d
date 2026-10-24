@@ -1,0 +1,9 @@
+node_modules/
+dist/
+*.rbxl
+*.rbxlx
+*.rbxm
+*.rbxmx
+.DS_Store
+__pycache__/
+*.pyc

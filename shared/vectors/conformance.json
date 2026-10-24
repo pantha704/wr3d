@@ -1,0 +1,1622 @@
+{
+ "_source": "MainTimeline.as (air.WR3DFree 1.750.64)",
+ "prng": "mulberry32",
+ "vectors": {
+  "rnd": {
+   "spec": "Math.round(Math.random()*(max-min))+min  \u2014 endpoints receive half weight",
+   "seeds": [
+    {
+     "seed": 1234,
+     "lo": 0,
+     "hi": 100,
+     "first10": [
+      7,
+      70,
+      90,
+      97,
+      4,
+      12,
+      16,
+      80,
+      40,
+      13
+     ]
+    },
+    {
+     "seed": 1234,
+     "lo": 5,
+     "hi": 10,
+     "first10": [
+      5,
+      9,
+      10,
+      10,
+      5,
+      6,
+      6,
+      9,
+      7,
+      6
+     ]
+    }
+   ]
+  },
+  "strike_damage": {
+   "spec": "pain = Math.round(Strength * mult); *1.25 if special active",
+   "cases": [
+    {
+     "strength": 60,
+     "mult": 1,
+     "special": false,
+     "expected": 60
+    },
+    {
+     "strength": 60,
+     "mult": 1,
+     "special": true,
+     "expected": 75
+    },
+    {
+     "strength": 60,
+     "mult": 2,
+     "special": false,
+     "expected": 120
+    },
+    {
+     "strength": 60,
+     "mult": 2,
+     "special": true,
+     "expected": 150
+    },
+    {
+     "strength": 60,
+     "mult": 5,
+     "special": false,
+     "expected": 300
+    },
+    {
+     "strength": 60,
+     "mult": 5,
+     "special": true,
+     "expected": 375
+    },
+    {
+     "strength": 60,
+     "mult": 6,
+     "special": false,
+     "expected": 360
+    },
+    {
+     "strength": 60,
+     "mult": 6,
+     "special": true,
+     "expected": 450
+    },
+    {
+     "strength": 75,
+     "mult": 1,
+     "special": false,
+     "expected": 75
+    },
+    {
+     "strength": 75,
+     "mult": 1,
+     "special": true,
+     "expected": 94
+    },
+    {
+     "strength": 75,
+     "mult": 2,
+     "special": false,
+     "expected": 150
+    },
+    {
+     "strength": 75,
+     "mult": 2,
+     "special": true,
+     "expected": 188
+    },
+    {
+     "strength": 75,
+     "mult": 5,
+     "special": false,
+     "expected": 375
+    },
+    {
+     "strength": 75,
+     "mult": 5,
+     "special": true,
+     "expected": 469
+    },
+    {
+     "strength": 75,
+     "mult": 6,
+     "special": false,
+     "expected": 450
+    },
+    {
+     "strength": 75,
+     "mult": 6,
+     "special": true,
+     "expected": 563
+    },
+    {
+     "strength": 90,
+     "mult": 1,
+     "special": false,
+     "expected": 90
+    },
+    {
+     "strength": 90,
+     "mult": 1,
+     "special": true,
+     "expected": 113
+    },
+    {
+     "strength": 90,
+     "mult": 2,
+     "special": false,
+     "expected": 180
+    },
+    {
+     "strength": 90,
+     "mult": 2,
+     "special": true,
+     "expected": 225
+    },
+    {
+     "strength": 90,
+     "mult": 5,
+     "special": false,
+     "expected": 450
+    },
+    {
+     "strength": 90,
+     "mult": 5,
+     "special": true,
+     "expected": 563
+    },
+    {
+     "strength": 90,
+     "mult": 6,
+     "special": false,
+     "expected": 540
+    },
+    {
+     "strength": 90,
+     "mult": 6,
+     "special": true,
+     "expected": 675
+    },
+    {
+     "strength": 95,
+     "mult": 1,
+     "special": false,
+     "expected": 95
+    },
+    {
+     "strength": 95,
+     "mult": 1,
+     "special": true,
+     "expected": 119
+    },
+    {
+     "strength": 95,
+     "mult": 2,
+     "special": false,
+     "expected": 190
+    },
+    {
+     "strength": 95,
+     "mult": 2,
+     "special": true,
+     "expected": 238
+    },
+    {
+     "strength": 95,
+     "mult": 5,
+     "special": false,
+     "expected": 475
+    },
+    {
+     "strength": 95,
+     "mult": 5,
+     "special": true,
+     "expected": 594
+    },
+    {
+     "strength": 95,
+     "mult": 6,
+     "special": false,
+     "expected": 570
+    },
+    {
+     "strength": 95,
+     "mult": 6,
+     "special": true,
+     "expected": 713
+    }
+   ]
+  },
+  "poise": {
+   "spec": "pHP -= pain/50 * (150 - Toughness); cap = health/5; starts 1000",
+   "cases": [
+    {
+     "pain": 150,
+     "toughness": 60,
+     "expected": 270.0
+    },
+    {
+     "pain": 150,
+     "toughness": 75,
+     "expected": 225.0
+    },
+    {
+     "pain": 150,
+     "toughness": 95,
+     "expected": 165.0
+    },
+    {
+     "pain": 450,
+     "toughness": 60,
+     "expected": 810.0
+    },
+    {
+     "pain": 450,
+     "toughness": 75,
+     "expected": 675.0
+    },
+    {
+     "pain": 450,
+     "toughness": 95,
+     "expected": 495.0
+    }
+   ]
+  },
+  "special_meter": {
+   "spec": "100 + Popularity + Rnd(0,100)",
+   "cases": [
+    {
+     "popularity": 65,
+     "seed": 77,
+     "expected": 208
+    },
+    {
+     "popularity": 95,
+     "seed": 77,
+     "expected": 199
+    }
+   ]
+  },
+  "contest_chance": {
+   "spec": "chance = atkStat + (150 - defSkill); *sizeDiff; *0.75 if either run-up",
+   "cases": [
+    {
+     "atkStat": 60,
+     "defSkill": 60,
+     "sizeDiff": 1,
+     "runUp": false,
+     "expected": 150
+    },
+    {
+     "atkStat": 60,
+     "defSkill": 60,
+     "sizeDiff": 1,
+     "runUp": true,
+     "expected": 112.5
+    },
+    {
+     "atkStat": 60,
+     "defSkill": 60,
+     "sizeDiff": 1.2,
+     "runUp": false,
+     "expected": 180.0
+    },
+    {
+     "atkStat": 60,
+     "defSkill": 60,
+     "sizeDiff": 1.2,
+     "runUp": true,
+     "expected": 135.0
+    },
+    {
+     "atkStat": 60,
+     "defSkill": 90,
+     "sizeDiff": 1,
+     "runUp": false,
+     "expected": 120
+    },
+    {
+     "atkStat": 60,
+     "defSkill": 90,
+     "sizeDiff": 1,
+     "runUp": true,
+     "expected": 90.0
+    },
+    {
+     "atkStat": 60,
+     "defSkill": 90,
+     "sizeDiff": 1.2,
+     "runUp": false,
+     "expected": 144.0
+    },
+    {
+     "atkStat": 60,
+     "defSkill": 90,
+     "sizeDiff": 1.2,
+     "runUp": true,
+     "expected": 108.0
+    },
+    {
+     "atkStat": 75,
+     "defSkill": 60,
+     "sizeDiff": 1,
+     "runUp": false,
+     "expected": 165
+    },
+    {
+     "atkStat": 75,
+     "defSkill": 60,
+     "sizeDiff": 1,
+     "runUp": true,
+     "expected": 123.75
+    },
+    {
+     "atkStat": 75,
+     "defSkill": 60,
+     "sizeDiff": 1.2,
+     "runUp": false,
+     "expected": 198.0
+    },
+    {
+     "atkStat": 75,
+     "defSkill": 60,
+     "sizeDiff": 1.2,
+     "runUp": true,
+     "expected": 148.5
+    },
+    {
+     "atkStat": 75,
+     "defSkill": 90,
+     "sizeDiff": 1,
+     "runUp": false,
+     "expected": 135
+    },
+    {
+     "atkStat": 75,
+     "defSkill": 90,
+     "sizeDiff": 1,
+     "runUp": true,
+     "expected": 101.25
+    },
+    {
+     "atkStat": 75,
+     "defSkill": 90,
+     "sizeDiff": 1.2,
+     "runUp": false,
+     "expected": 162.0
+    },
+    {
+     "atkStat": 75,
+     "defSkill": 90,
+     "sizeDiff": 1.2,
+     "runUp": true,
+     "expected": 121.5
+    },
+    {
+     "atkStat": 90,
+     "defSkill": 60,
+     "sizeDiff": 1,
+     "runUp": false,
+     "expected": 180
+    },
+    {
+     "atkStat": 90,
+     "defSkill": 60,
+     "sizeDiff": 1,
+     "runUp": true,
+     "expected": 135.0
+    },
+    {
+     "atkStat": 90,
+     "defSkill": 60,
+     "sizeDiff": 1.2,
+     "runUp": false,
+     "expected": 216.0
+    },
+    {
+     "atkStat": 90,
+     "defSkill": 60,
+     "sizeDiff": 1.2,
+     "runUp": true,
+     "expected": 162.0
+    },
+    {
+     "atkStat": 90,
+     "defSkill": 90,
+     "sizeDiff": 1,
+     "runUp": false,
+     "expected": 150
+    },
+    {
+     "atkStat": 90,
+     "defSkill": 90,
+     "sizeDiff": 1,
+     "runUp": true,
+     "expected": 112.5
+    },
+    {
+     "atkStat": 90,
+     "defSkill": 90,
+     "sizeDiff": 1.2,
+     "runUp": false,
+     "expected": 180.0
+    },
+    {
+     "atkStat": 90,
+     "defSkill": 90,
+     "sizeDiff": 1.2,
+     "runUp": true,
+     "expected": 135.0
+    }
+   ]
+  },
+  "char_worth": {
+   "spec": "chunk=max(15,StatAvg-40); worth=chunk^3/15; modifiers; round10; floor 100",
+   "cases": [
+    {
+     "statAvg": 60,
+     "fed": 0,
+     "injured": false,
+     "champ": 0,
+     "booker": false,
+     "expected": 530
+    },
+    {
+     "statAvg": 60,
+     "fed": 0,
+     "injured": false,
+     "champ": 0,
+     "booker": true,
+     "expected": 800
+    },
+    {
+     "statAvg": 60,
+     "fed": 0,
+     "injured": false,
+     "champ": 1,
+     "booker": false,
+     "expected": 800
+    },
+    {
+     "statAvg": 60,
+     "fed": 0,
+     "injured": false,
+     "champ": 1,
+     "booker": true,
+     "expected": 1200
+    },
+    {
+     "statAvg": 60,
+     "fed": 0,
+     "injured": false,
+     "champ": 2,
+     "booker": false,
+     "expected": 670
+    },
+    {
+     "statAvg": 60,
+     "fed": 0,
+     "injured": false,
+     "champ": 2,
+     "booker": true,
+     "expected": 1000
+    },
+    {
+     "statAvg": 60,
+     "fed": 0,
+     "injured": true,
+     "champ": 0,
+     "booker": false,
+     "expected": 400
+    },
+    {
+     "statAvg": 60,
+     "fed": 0,
+     "injured": true,
+     "champ": 0,
+     "booker": true,
+     "expected": 600
+    },
+    {
+     "statAvg": 60,
+     "fed": 0,
+     "injured": true,
+     "champ": 1,
+     "booker": false,
+     "expected": 600
+    },
+    {
+     "statAvg": 60,
+     "fed": 0,
+     "injured": true,
+     "champ": 1,
+     "booker": true,
+     "expected": 900
+    },
+    {
+     "statAvg": 60,
+     "fed": 0,
+     "injured": true,
+     "champ": 2,
+     "booker": false,
+     "expected": 500
+    },
+    {
+     "statAvg": 60,
+     "fed": 0,
+     "injured": true,
+     "champ": 2,
+     "booker": true,
+     "expected": 750
+    },
+    {
+     "statAvg": 60,
+     "fed": 7,
+     "injured": false,
+     "champ": 0,
+     "booker": false,
+     "expected": 270
+    },
+    {
+     "statAvg": 60,
+     "fed": 7,
+     "injured": false,
+     "champ": 0,
+     "booker": true,
+     "expected": 400
+    },
+    {
+     "statAvg": 60,
+     "fed": 7,
+     "injured": false,
+     "champ": 1,
+     "booker": false,
+     "expected": 400
+    },
+    {
+     "statAvg": 60,
+     "fed": 7,
+     "injured": false,
+     "champ": 1,
+     "booker": true,
+     "expected": 600
+    },
+    {
+     "statAvg": 60,
+     "fed": 7,
+     "injured": false,
+     "champ": 2,
+     "booker": false,
+     "expected": 330
+    },
+    {
+     "statAvg": 60,
+     "fed": 7,
+     "injured": false,
+     "champ": 2,
+     "booker": true,
+     "expected": 500
+    },
+    {
+     "statAvg": 60,
+     "fed": 7,
+     "injured": true,
+     "champ": 0,
+     "booker": false,
+     "expected": 200
+    },
+    {
+     "statAvg": 60,
+     "fed": 7,
+     "injured": true,
+     "champ": 0,
+     "booker": true,
+     "expected": 300
+    },
+    {
+     "statAvg": 60,
+     "fed": 7,
+     "injured": true,
+     "champ": 1,
+     "booker": false,
+     "expected": 300
+    },
+    {
+     "statAvg": 60,
+     "fed": 7,
+     "injured": true,
+     "champ": 1,
+     "booker": true,
+     "expected": 450
+    },
+    {
+     "statAvg": 60,
+     "fed": 7,
+     "injured": true,
+     "champ": 2,
+     "booker": false,
+     "expected": 250
+    },
+    {
+     "statAvg": 60,
+     "fed": 7,
+     "injured": true,
+     "champ": 2,
+     "booker": true,
+     "expected": 370
+    },
+    {
+     "statAvg": 60,
+     "fed": 8,
+     "injured": false,
+     "champ": 0,
+     "booker": false,
+     "expected": 800
+    },
+    {
+     "statAvg": 60,
+     "fed": 8,
+     "injured": false,
+     "champ": 0,
+     "booker": true,
+     "expected": 1200
+    },
+    {
+     "statAvg": 60,
+     "fed": 8,
+     "injured": false,
+     "champ": 1,
+     "booker": false,
+     "expected": 1200
+    },
+    {
+     "statAvg": 60,
+     "fed": 8,
+     "injured": false,
+     "champ": 1,
+     "booker": true,
+     "expected": 1800
+    },
+    {
+     "statAvg": 60,
+     "fed": 8,
+     "injured": false,
+     "champ": 2,
+     "booker": false,
+     "expected": 1000
+    },
+    {
+     "statAvg": 60,
+     "fed": 8,
+     "injured": false,
+     "champ": 2,
+     "booker": true,
+     "expected": 1500
+    },
+    {
+     "statAvg": 60,
+     "fed": 8,
+     "injured": true,
+     "champ": 0,
+     "booker": false,
+     "expected": 600
+    },
+    {
+     "statAvg": 60,
+     "fed": 8,
+     "injured": true,
+     "champ": 0,
+     "booker": true,
+     "expected": 900
+    },
+    {
+     "statAvg": 60,
+     "fed": 8,
+     "injured": true,
+     "champ": 1,
+     "booker": false,
+     "expected": 900
+    },
+    {
+     "statAvg": 60,
+     "fed": 8,
+     "injured": true,
+     "champ": 1,
+     "booker": true,
+     "expected": 1350
+    },
+    {
+     "statAvg": 60,
+     "fed": 8,
+     "injured": true,
+     "champ": 2,
+     "booker": false,
+     "expected": 750
+    },
+    {
+     "statAvg": 60,
+     "fed": 8,
+     "injured": true,
+     "champ": 2,
+     "booker": true,
+     "expected": 1120
+    },
+    {
+     "statAvg": 75,
+     "fed": 0,
+     "injured": false,
+     "champ": 0,
+     "booker": false,
+     "expected": 2860
+    },
+    {
+     "statAvg": 75,
+     "fed": 0,
+     "injured": false,
+     "champ": 0,
+     "booker": true,
+     "expected": 4290
+    },
+    {
+     "statAvg": 75,
+     "fed": 0,
+     "injured": false,
+     "champ": 1,
+     "booker": false,
+     "expected": 4290
+    },
+    {
+     "statAvg": 75,
+     "fed": 0,
+     "injured": false,
+     "champ": 1,
+     "booker": true,
+     "expected": 6430
+    },
+    {
+     "statAvg": 75,
+     "fed": 0,
+     "injured": false,
+     "champ": 2,
+     "booker": false,
+     "expected": 3570
+    },
+    {
+     "statAvg": 75,
+     "fed": 0,
+     "injured": false,
+     "champ": 2,
+     "booker": true,
+     "expected": 5360
+    },
+    {
+     "statAvg": 75,
+     "fed": 0,
+     "injured": true,
+     "champ": 0,
+     "booker": false,
+     "expected": 2140
+    },
+    {
+     "statAvg": 75,
+     "fed": 0,
+     "injured": true,
+     "champ": 0,
+     "booker": true,
+     "expected": 3220
+    },
+    {
+     "statAvg": 75,
+     "fed": 0,
+     "injured": true,
+     "champ": 1,
+     "booker": false,
+     "expected": 3220
+    },
+    {
+     "statAvg": 75,
+     "fed": 0,
+     "injured": true,
+     "champ": 1,
+     "booker": true,
+     "expected": 4820
+    },
+    {
+     "statAvg": 75,
+     "fed": 0,
+     "injured": true,
+     "champ": 2,
+     "booker": false,
+     "expected": 2680
+    },
+    {
+     "statAvg": 75,
+     "fed": 0,
+     "injured": true,
+     "champ": 2,
+     "booker": true,
+     "expected": 4020
+    },
+    {
+     "statAvg": 75,
+     "fed": 7,
+     "injured": false,
+     "champ": 0,
+     "booker": false,
+     "expected": 1430
+    },
+    {
+     "statAvg": 75,
+     "fed": 7,
+     "injured": false,
+     "champ": 0,
+     "booker": true,
+     "expected": 2140
+    },
+    {
+     "statAvg": 75,
+     "fed": 7,
+     "injured": false,
+     "champ": 1,
+     "booker": false,
+     "expected": 2140
+    },
+    {
+     "statAvg": 75,
+     "fed": 7,
+     "injured": false,
+     "champ": 1,
+     "booker": true,
+     "expected": 3220
+    },
+    {
+     "statAvg": 75,
+     "fed": 7,
+     "injured": false,
+     "champ": 2,
+     "booker": false,
+     "expected": 1790
+    },
+    {
+     "statAvg": 75,
+     "fed": 7,
+     "injured": false,
+     "champ": 2,
+     "booker": true,
+     "expected": 2680
+    },
+    {
+     "statAvg": 75,
+     "fed": 7,
+     "injured": true,
+     "champ": 0,
+     "booker": false,
+     "expected": 1070
+    },
+    {
+     "statAvg": 75,
+     "fed": 7,
+     "injured": true,
+     "champ": 0,
+     "booker": true,
+     "expected": 1610
+    },
+    {
+     "statAvg": 75,
+     "fed": 7,
+     "injured": true,
+     "champ": 1,
+     "booker": false,
+     "expected": 1610
+    },
+    {
+     "statAvg": 75,
+     "fed": 7,
+     "injured": true,
+     "champ": 1,
+     "booker": true,
+     "expected": 2410
+    },
+    {
+     "statAvg": 75,
+     "fed": 7,
+     "injured": true,
+     "champ": 2,
+     "booker": false,
+     "expected": 1340
+    },
+    {
+     "statAvg": 75,
+     "fed": 7,
+     "injured": true,
+     "champ": 2,
+     "booker": true,
+     "expected": 2010
+    },
+    {
+     "statAvg": 75,
+     "fed": 8,
+     "injured": false,
+     "champ": 0,
+     "booker": false,
+     "expected": 4290
+    },
+    {
+     "statAvg": 75,
+     "fed": 8,
+     "injured": false,
+     "champ": 0,
+     "booker": true,
+     "expected": 6430
+    },
+    {
+     "statAvg": 75,
+     "fed": 8,
+     "injured": false,
+     "champ": 1,
+     "booker": false,
+     "expected": 6430
+    },
+    {
+     "statAvg": 75,
+     "fed": 8,
+     "injured": false,
+     "champ": 1,
+     "booker": true,
+     "expected": 9650
+    },
+    {
+     "statAvg": 75,
+     "fed": 8,
+     "injured": false,
+     "champ": 2,
+     "booker": false,
+     "expected": 5360
+    },
+    {
+     "statAvg": 75,
+     "fed": 8,
+     "injured": false,
+     "champ": 2,
+     "booker": true,
+     "expected": 8040
+    },
+    {
+     "statAvg": 75,
+     "fed": 8,
+     "injured": true,
+     "champ": 0,
+     "booker": false,
+     "expected": 3220
+    },
+    {
+     "statAvg": 75,
+     "fed": 8,
+     "injured": true,
+     "champ": 0,
+     "booker": true,
+     "expected": 4820
+    },
+    {
+     "statAvg": 75,
+     "fed": 8,
+     "injured": true,
+     "champ": 1,
+     "booker": false,
+     "expected": 4820
+    },
+    {
+     "statAvg": 75,
+     "fed": 8,
+     "injured": true,
+     "champ": 1,
+     "booker": true,
+     "expected": 7240
+    },
+    {
+     "statAvg": 75,
+     "fed": 8,
+     "injured": true,
+     "champ": 2,
+     "booker": false,
+     "expected": 4020
+    },
+    {
+     "statAvg": 75,
+     "fed": 8,
+     "injured": true,
+     "champ": 2,
+     "booker": true,
+     "expected": 6030
+    },
+    {
+     "statAvg": 90,
+     "fed": 0,
+     "injured": false,
+     "champ": 0,
+     "booker": false,
+     "expected": 8330
+    },
+    {
+     "statAvg": 90,
+     "fed": 0,
+     "injured": false,
+     "champ": 0,
+     "booker": true,
+     "expected": 12500
+    },
+    {
+     "statAvg": 90,
+     "fed": 0,
+     "injured": false,
+     "champ": 1,
+     "booker": false,
+     "expected": 12500
+    },
+    {
+     "statAvg": 90,
+     "fed": 0,
+     "injured": false,
+     "champ": 1,
+     "booker": true,
+     "expected": 18750
+    },
+    {
+     "statAvg": 90,
+     "fed": 0,
+     "injured": false,
+     "champ": 2,
+     "booker": false,
+     "expected": 10420
+    },
+    {
+     "statAvg": 90,
+     "fed": 0,
+     "injured": false,
+     "champ": 2,
+     "booker": true,
+     "expected": 15630
+    },
+    {
+     "statAvg": 90,
+     "fed": 0,
+     "injured": true,
+     "champ": 0,
+     "booker": false,
+     "expected": 6250
+    },
+    {
+     "statAvg": 90,
+     "fed": 0,
+     "injured": true,
+     "champ": 0,
+     "booker": true,
+     "expected": 9380
+    },
+    {
+     "statAvg": 90,
+     "fed": 0,
+     "injured": true,
+     "champ": 1,
+     "booker": false,
+     "expected": 9380
+    },
+    {
+     "statAvg": 90,
+     "fed": 0,
+     "injured": true,
+     "champ": 1,
+     "booker": true,
+     "expected": 14060
+    },
+    {
+     "statAvg": 90,
+     "fed": 0,
+     "injured": true,
+     "champ": 2,
+     "booker": false,
+     "expected": 7810
+    },
+    {
+     "statAvg": 90,
+     "fed": 0,
+     "injured": true,
+     "champ": 2,
+     "booker": true,
+     "expected": 11720
+    },
+    {
+     "statAvg": 90,
+     "fed": 7,
+     "injured": false,
+     "champ": 0,
+     "booker": false,
+     "expected": 4170
+    },
+    {
+     "statAvg": 90,
+     "fed": 7,
+     "injured": false,
+     "champ": 0,
+     "booker": true,
+     "expected": 6250
+    },
+    {
+     "statAvg": 90,
+     "fed": 7,
+     "injured": false,
+     "champ": 1,
+     "booker": false,
+     "expected": 6250
+    },
+    {
+     "statAvg": 90,
+     "fed": 7,
+     "injured": false,
+     "champ": 1,
+     "booker": true,
+     "expected": 9380
+    },
+    {
+     "statAvg": 90,
+     "fed": 7,
+     "injured": false,
+     "champ": 2,
+     "booker": false,
+     "expected": 5210
+    },
+    {
+     "statAvg": 90,
+     "fed": 7,
+     "injured": false,
+     "champ": 2,
+     "booker": true,
+     "expected": 7810
+    },
+    {
+     "statAvg": 90,
+     "fed": 7,
+     "injured": true,
+     "champ": 0,
+     "booker": false,
+     "expected": 3130
+    },
+    {
+     "statAvg": 90,
+     "fed": 7,
+     "injured": true,
+     "champ": 0,
+     "booker": true,
+     "expected": 4690
+    },
+    {
+     "statAvg": 90,
+     "fed": 7,
+     "injured": true,
+     "champ": 1,
+     "booker": false,
+     "expected": 4690
+    },
+    {
+     "statAvg": 90,
+     "fed": 7,
+     "injured": true,
+     "champ": 1,
+     "booker": true,
+     "expected": 7030
+    },
+    {
+     "statAvg": 90,
+     "fed": 7,
+     "injured": true,
+     "champ": 2,
+     "booker": false,
+     "expected": 3910
+    },
+    {
+     "statAvg": 90,
+     "fed": 7,
+     "injured": true,
+     "champ": 2,
+     "booker": true,
+     "expected": 5860
+    },
+    {
+     "statAvg": 90,
+     "fed": 8,
+     "injured": false,
+     "champ": 0,
+     "booker": false,
+     "expected": 12500
+    },
+    {
+     "statAvg": 90,
+     "fed": 8,
+     "injured": false,
+     "champ": 0,
+     "booker": true,
+     "expected": 18750
+    },
+    {
+     "statAvg": 90,
+     "fed": 8,
+     "injured": false,
+     "champ": 1,
+     "booker": false,
+     "expected": 18750
+    },
+    {
+     "statAvg": 90,
+     "fed": 8,
+     "injured": false,
+     "champ": 1,
+     "booker": true,
+     "expected": 28130
+    },
+    {
+     "statAvg": 90,
+     "fed": 8,
+     "injured": false,
+     "champ": 2,
+     "booker": false,
+     "expected": 15630
+    },
+    {
+     "statAvg": 90,
+     "fed": 8,
+     "injured": false,
+     "champ": 2,
+     "booker": true,
+     "expected": 23440
+    },
+    {
+     "statAvg": 90,
+     "fed": 8,
+     "injured": true,
+     "champ": 0,
+     "booker": false,
+     "expected": 9380
+    },
+    {
+     "statAvg": 90,
+     "fed": 8,
+     "injured": true,
+     "champ": 0,
+     "booker": true,
+     "expected": 14060
+    },
+    {
+     "statAvg": 90,
+     "fed": 8,
+     "injured": true,
+     "champ": 1,
+     "booker": false,
+     "expected": 14060
+    },
+    {
+     "statAvg": 90,
+     "fed": 8,
+     "injured": true,
+     "champ": 1,
+     "booker": true,
+     "expected": 21090
+    },
+    {
+     "statAvg": 90,
+     "fed": 8,
+     "injured": true,
+     "champ": 2,
+     "booker": false,
+     "expected": 11720
+    },
+    {
+     "statAvg": 90,
+     "fed": 8,
+     "injured": true,
+     "champ": 2,
+     "booker": true,
+     "expected": 17580
+    },
+    {
+     "statAvg": 99,
+     "fed": 0,
+     "injured": false,
+     "champ": 0,
+     "booker": false,
+     "expected": 13690
+    },
+    {
+     "statAvg": 99,
+     "fed": 0,
+     "injured": false,
+     "champ": 0,
+     "booker": true,
+     "expected": 20540
+    },
+    {
+     "statAvg": 99,
+     "fed": 0,
+     "injured": false,
+     "champ": 1,
+     "booker": false,
+     "expected": 20540
+    },
+    {
+     "statAvg": 99,
+     "fed": 0,
+     "injured": false,
+     "champ": 1,
+     "booker": true,
+     "expected": 30810
+    },
+    {
+     "statAvg": 99,
+     "fed": 0,
+     "injured": false,
+     "champ": 2,
+     "booker": false,
+     "expected": 17110
+    },
+    {
+     "statAvg": 99,
+     "fed": 0,
+     "injured": false,
+     "champ": 2,
+     "booker": true,
+     "expected": 25670
+    },
+    {
+     "statAvg": 99,
+     "fed": 0,
+     "injured": true,
+     "champ": 0,
+     "booker": false,
+     "expected": 10270
+    },
+    {
+     "statAvg": 99,
+     "fed": 0,
+     "injured": true,
+     "champ": 0,
+     "booker": true,
+     "expected": 15400
+    },
+    {
+     "statAvg": 99,
+     "fed": 0,
+     "injured": true,
+     "champ": 1,
+     "booker": false,
+     "expected": 15400
+    },
+    {
+     "statAvg": 99,
+     "fed": 0,
+     "injured": true,
+     "champ": 1,
+     "booker": true,
+     "expected": 23110
+    },
+    {
+     "statAvg": 99,
+     "fed": 0,
+     "injured": true,
+     "champ": 2,
+     "booker": false,
+     "expected": 12840
+    },
+    {
+     "statAvg": 99,
+     "fed": 0,
+     "injured": true,
+     "champ": 2,
+     "booker": true,
+     "expected": 19250
+    },
+    {
+     "statAvg": 99,
+     "fed": 7,
+     "injured": false,
+     "champ": 0,
+     "booker": false,
+     "expected": 6850
+    },
+    {
+     "statAvg": 99,
+     "fed": 7,
+     "injured": false,
+     "champ": 0,
+     "booker": true,
+     "expected": 10270
+    },
+    {
+     "statAvg": 99,
+     "fed": 7,
+     "injured": false,
+     "champ": 1,
+     "booker": false,
+     "expected": 10270
+    },
+    {
+     "statAvg": 99,
+     "fed": 7,
+     "injured": false,
+     "champ": 1,
+     "booker": true,
+     "expected": 15400
+    },
+    {
+     "statAvg": 99,
+     "fed": 7,
+     "injured": false,
+     "champ": 2,
+     "booker": false,
+     "expected": 8560
+    },
+    {
+     "statAvg": 99,
+     "fed": 7,
+     "injured": false,
+     "champ": 2,
+     "booker": true,
+     "expected": 12840
+    },
+    {
+     "statAvg": 99,
+     "fed": 7,
+     "injured": true,
+     "champ": 0,
+     "booker": false,
+     "expected": 5130
+    },
+    {
+     "statAvg": 99,
+     "fed": 7,
+     "injured": true,
+     "champ": 0,
+     "booker": true,
+     "expected": 7700
+    },
+    {
+     "statAvg": 99,
+     "fed": 7,
+     "injured": true,
+     "champ": 1,
+     "booker": false,
+     "expected": 7700
+    },
+    {
+     "statAvg": 99,
+     "fed": 7,
+     "injured": true,
+     "champ": 1,
+     "booker": true,
+     "expected": 11550
+    },
+    {
+     "statAvg": 99,
+     "fed": 7,
+     "injured": true,
+     "champ": 2,
+     "booker": false,
+     "expected": 6420
+    },
+    {
+     "statAvg": 99,
+     "fed": 7,
+     "injured": true,
+     "champ": 2,
+     "booker": true,
+     "expected": 9630
+    },
+    {
+     "statAvg": 99,
+     "fed": 8,
+     "injured": false,
+     "champ": 0,
+     "booker": false,
+     "expected": 20540
+    },
+    {
+     "statAvg": 99,
+     "fed": 8,
+     "injured": false,
+     "champ": 0,
+     "booker": true,
+     "expected": 30810
+    },
+    {
+     "statAvg": 99,
+     "fed": 8,
+     "injured": false,
+     "champ": 1,
+     "booker": false,
+     "expected": 30810
+    },
+    {
+     "statAvg": 99,
+     "fed": 8,
+     "injured": false,
+     "champ": 1,
+     "booker": true,
+     "expected": 46210
+    },
+    {
+     "statAvg": 99,
+     "fed": 8,
+     "injured": false,
+     "champ": 2,
+     "booker": false,
+     "expected": 25670
+    },
+    {
+     "statAvg": 99,
+     "fed": 8,
+     "injured": false,
+     "champ": 2,
+     "booker": true,
+     "expected": 38510
+    },
+    {
+     "statAvg": 99,
+     "fed": 8,
+     "injured": true,
+     "champ": 0,
+     "booker": false,
+     "expected": 15400
+    },
+    {
+     "statAvg": 99,
+     "fed": 8,
+     "injured": true,
+     "champ": 0,
+     "booker": true,
+     "expected": 23110
+    },
+    {
+     "statAvg": 99,
+     "fed": 8,
+     "injured": true,
+     "champ": 1,
+     "booker": false,
+     "expected": 23110
+    },
+    {
+     "statAvg": 99,
+     "fed": 8,
+     "injured": true,
+     "champ": 1,
+     "booker": true,
+     "expected": 34660
+    },
+    {
+     "statAvg": 99,
+     "fed": 8,
+     "injured": true,
+     "champ": 2,
+     "booker": false,
+     "expected": 19250
+    },
+    {
+     "statAvg": 99,
+     "fed": 8,
+     "injured": true,
+     "champ": 2,
+     "booker": true,
+     "expected": 28880
+    }
+   ]
+  }
+ }
+}
