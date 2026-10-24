@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>WR3D — grey-box</title>
+    <style>
+      :root { color-scheme: dark; }
+      * { box-sizing: border-box; }
+      body { margin: 0; font: 14px/1.4 ui-monospace, "SF Mono", Menlo, monospace; background: #0b0b0d; color: #e8e6e3; }
+      #app { position: fixed; inset: 0; display: grid; grid-template-columns: 1fr 320px; }
+      #viewport { position: relative; }
+      canvas { display: block; width: 100%; height: 100%; }
+      #hud { border-left: 1px solid #23232a; padding: 16px; overflow-y: auto; background: #101014; }
+      .fighter { margin-bottom: 18px; }
+      .name { font-weight: 700; letter-spacing: .04em; text-transform: uppercase; font-size: 12px; color: #9a9aa8; margin-bottom: 6px; }
+      .bar { height: 10px; background: #1c1c22; border-radius: 2px; overflow: hidden; margin-bottom: 4px; }
+      .bar > i { display: block; height: 100%; transition: width .08s linear; }
+      .hp > i { background: linear-gradient(90deg, #d64545, #ff7a5c); }
+      .poise > i { background: linear-gradient(90deg, #3d7fd6, #63c5ff); }
+      .meta { display: flex; justify-content: space-between; font-size: 11px; color: #6e6e7c; }
+      button { width: 100%; margin: 4px 0; padding: 9px 10px; background: #1b1b22; color: #e8e6e3; border: 1px solid #2e2e38; border-radius: 4px; cursor: pointer; font: inherit; }
+      button:hover { background: #24242d; }
+      button.primary { background: #2c3a5e; border-color: #3d5285; }
+      button.primary:hover { background: #35476f; }
+      #log { margin-top: 12px; height: 150px; overflow-y: auto; font-size: 11px; color: #8888a0; white-space: pre-wrap; border-top: 1px solid #23232a; padding-top: 8px; }
+      h2 { font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: #55556a; margin: 18px 0 8px; }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <div id="viewport"></div>
+      <div id="hud"></div>
+    </div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
