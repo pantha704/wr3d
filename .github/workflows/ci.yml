@@ -1,0 +1,54 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  web:
+    name: Web — vectors + build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: web/pnpm-lock.yaml
+      - name: Install
+        working-directory: web
+        run: pnpm install --frozen-lockfile
+      - name: Conformance vectors
+        working-directory: web
+        run: pnpm test
+      - name: Typecheck + build
+        working-directory: web
+        run: pnpm build
+
+  roblox:
+    name: Roblox — vectors + build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Lune
+        run: |
+          curl -fsSL -o lune.zip https://github.com/lune-org/lune/releases/download/v0.11.1/lune-0.11.1-linux-x86_64.zip
+          unzip -o -q lune.zip
+          install -m755 lune /usr/local/bin/lune
+      - name: Conformance vectors (Luau must match the TypeScript sim exactly)
+        run: lune run roblox/tests/conformance.luau
+      - name: Install Rojo
+        run: |
+          curl -fsSL -o rojo.zip https://github.com/rojo-rbx/rojo/releases/download/v7.5.1/rojo-7.5.1-linux-x86_64.zip
+          unzip -o -q rojo.zip
+          install -m755 rojo /usr/local/bin/rojo
+      - name: Build place file
+        run: rojo build roblox/default.project.json -o wr3d.rbxlx
+      - uses: actions/upload-artifact@v4
+        with:
+          name: wr3d-place
+          path: wr3d.rbxlx
