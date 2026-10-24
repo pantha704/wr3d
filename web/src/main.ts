@@ -8,6 +8,9 @@ import { createMatch, type Fighter } from './sim/match';
 import { createArenaFromMatch, stepArena, drainEvents, type Intent, ARENA_RADIUS } from './sim/arena';
 import { aiIntent, createAiMemory } from './sim/ai';
 import { mulberry32 } from './sim/prng';
+import { mountTouchControls } from './ui/touch';
+import { mountErrorBoundary, mountIntro } from './ui/shell';
+import { applyResult, load as loadRecord, save as saveRecord, type MatchRecord } from './state/record';
 import roster from '../../shared/data/roster.generated.json';
 
 type RosterEntry = {
@@ -20,7 +23,9 @@ type RosterEntry = {
 const SEED = 20261024;
 const rng = mulberry32(SEED);
 const aiRng = mulberry32(SEED + 7);
-const aiMem = createAiMemory();
+let aiMem = createAiMemory();
+let record: MatchRecord = loadRecord(localStorage);
+let resultCounted = false;
 
 function statVector(entry: RosterEntry): number[] {
   const v = new Array(9).fill(0);
@@ -124,29 +129,43 @@ function playerIntent(): Intent {
   const right = held.has('d') || held.has('arrowright');
   const up = held.has('w') || held.has('arrowup');
   const down = held.has('s') || held.has('arrowdown');
+  const pad = touchIntent();
   return {
-    moveX: (right ? 1 : 0) - (left ? 1 : 0),
-    moveZ: (down ? 1 : 0) - (up ? 1 : 0),
-    strike: held.has('j') || held.has(' '),
-    grapple: held.has('k'),
+    moveX: clamp((right ? 1 : 0) - (left ? 1 : 0) + pad.moveX),
+    moveZ: clamp((down ? 1 : 0) - (up ? 1 : 0) + pad.moveZ),
+    strike: held.has('j') || held.has(' ') || pad.strike,
+    grapple: held.has('k') || pad.grapple,
   };
 }
+
+const clamp = (v: number): number => Math.max(-1, Math.min(1, v));
 
 // ---------------------------------------------------------------- hud
 hud.innerHTML = `
   <h2>Match</h2>
   <div id="fighters" role="group" aria-label="Fighter status"></div>
+  <div id="record" class="hint"></div>
   <h2>Controls</h2>
-  <p class="hint">Move <b>WASD</b> · Strike <b>J</b> / Space · Grapple <b>K</b> · Restart <b>R</b></p>
-  <p class="hint" id="seed">seed ${SEED}</p>
+  <p class="hint">Move <kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> · Strike <kbd>J</kbd> / Space · Grapple <kbd>K</kbd> · Rematch <kbd>R</kbd></p>
+  <p class="hint">seed ${SEED} · 18 Hz</p>
   <h2>Feed</h2>
   <div id="log" aria-live="polite" aria-atomic="false"></div>
   <div id="result" hidden></div>
 `;
 
+const touchIntent = mountTouchControls(viewport);
+
 const fightersEl = hud.querySelector<HTMLDivElement>('#fighters')!;
 const logEl = hud.querySelector<HTMLDivElement>('#log')!;
 const resultEl = hud.querySelector<HTMLDivElement>('#result')!;
+const recordEl = hud.querySelector<HTMLDivElement>('#record')!;
+
+function renderRecord(): void {
+  recordEl.textContent =
+    record.wins + record.losses === 0
+      ? 'no matches yet'
+      : `${record.wins}W · ${record.losses}L` + (record.lastOpponent ? ` · last vs ${record.lastOpponent}` : '');
+}
 
 function log(line: string): void {
   logEl.textContent = `${line}\n${logEl.textContent ?? ''}`.slice(0, 3000);
@@ -170,6 +189,7 @@ function bar(f: Fighter): string {
 function renderHud(): void {
   fightersEl.innerHTML = arena.match.fighters.map(bar).join('');
   if (arena.match.over) {
+    settle();
     resultEl.hidden = false;
     resultEl.textContent = `${arena.match.winner?.name ?? 'nobody'} wins — press R for a rematch`;
   } else {
@@ -177,16 +197,25 @@ function renderHud(): void {
   }
 }
 
+function settle(): void {
+  if (resultCounted) return;
+  resultCounted = true;
+  const won = arena.match.winner?.id === 1;
+  record = applyResult(record, won, arena.match.fighters[1]!.name);
+  saveRecord(localStorage, record);
+  renderRecord();
+}
+
 // ---------------------------------------------------------------- loop
 function restart(): void {
   [heroEntry, rivalEntry] = pickTwo();
-  arena = createArenaFromMatch(createMatch(
-    { id: 1, name: heroEntry.name, stats: statVector(heroEntry) },
-    { id: 2, name: rivalEntry.name, stats: statVector(rivalEntry) },
-  ));
+  arena = newArena();
+  aiMem = createAiMemory();
+  resultCounted = false;
   logEl.textContent = '';
   log(`sim 18 Hz · ${heroEntry.name} vs ${rivalEntry.name}`);
   renderHud();
+  renderRecord();
 }
 
 const TICK_MS = 1000 / FRAME_RATE; // 18 Hz, spec §0
@@ -248,5 +277,7 @@ function resize(): void {
 }
 addEventListener('resize', resize);
 resize();
+mountErrorBoundary();
+mountIntro(() => log('fight'));
 restart();
 requestAnimationFrame(frame);

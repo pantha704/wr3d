@@ -2,36 +2,127 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>WR3D — grey-box</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>WR3D — 3D wrestling, in your browser</title>
+    <meta name="description" content="A 3D wrestling game with a fully specified, deterministic simulation. Play in the browser, or build the same match in Roblox." />
+    <meta name="color-scheme" content="dark" />
+    <meta name="theme-color" content="#0b0b0d" />
     <style>
-      :root { color-scheme: dark; }
+      :root { color-scheme: dark; --line: #23232a; --panel: #101014; --ink: #e8e6e3; --dim: #9a9aa8; --faint: #6e6e7c; }
       * { box-sizing: border-box; }
-      body { margin: 0; font: 14px/1.4 ui-monospace, "SF Mono", Menlo, monospace; background: #0b0b0d; color: #e8e6e3; }
-      #app { position: fixed; inset: 0; display: grid; grid-template-columns: 1fr 320px; }
-      #viewport { position: relative; }
+      html, body { height: 100%; }
+      body {
+        margin: 0; background: #0b0b0d; color: var(--ink);
+        font: 14px/1.45 ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+        -webkit-tap-highlight-color: transparent; overscroll-behavior: none;
+      }
+      #app { position: fixed; inset: 0; display: grid; grid-template-columns: 1fr 340px; }
+      #viewport { position: relative; min-height: 0; }
       canvas { display: block; width: 100%; height: 100%; }
-      #hud { border-left: 1px solid #23232a; padding: 16px; overflow-y: auto; background: #101014; }
+
+      #hud {
+        border-left: 1px solid var(--line); padding: 16px calc(16px + env(safe-area-inset-right)) 16px 16px;
+        overflow-y: auto; background: var(--panel); min-height: 0;
+      }
       .fighter { margin-bottom: 18px; }
-      .name { font-weight: 700; letter-spacing: .04em; text-transform: uppercase; font-size: 12px; color: #9a9aa8; margin-bottom: 6px; }
+      .name { font-weight: 700; letter-spacing: .04em; text-transform: uppercase; font-size: 12px; color: var(--dim); margin-bottom: 6px; }
       .bar { height: 10px; background: #1c1c22; border-radius: 2px; overflow: hidden; margin-bottom: 4px; }
-      .bar > i { display: block; height: 100%; transition: width .08s linear; }
+      .bar > i { display: block; height: 100%; transition: width .1s linear; }
       .hp > i { background: linear-gradient(90deg, #d64545, #ff7a5c); }
       .poise > i { background: linear-gradient(90deg, #3d7fd6, #63c5ff); }
-      .meta { display: flex; justify-content: space-between; font-size: 11px; color: #6e6e7c; }
-      button { width: 100%; margin: 4px 0; padding: 9px 10px; background: #1b1b22; color: #e8e6e3; border: 1px solid #2e2e38; border-radius: 4px; cursor: pointer; font: inherit; }
-      button:hover { background: #24242d; }
-      button.primary { background: #2c3a5e; border-color: #3d5285; }
-      button.primary:hover { background: #35476f; }
-      #log { margin-top: 12px; height: 150px; overflow-y: auto; font-size: 11px; color: #8888a0; white-space: pre-wrap; border-top: 1px solid #23232a; padding-top: 8px; }
+      .meta { display: flex; justify-content: space-between; font-size: 11px; color: var(--faint); }
       h2 { font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: #55556a; margin: 18px 0 8px; }
+      .hint { font-size: 12px; color: var(--faint); margin: 0 0 6px; }
+      kbd {
+        font: inherit; font-size: 11px; padding: 1px 5px; border-radius: 3px;
+        border: 1px solid #33333f; background: #191920; color: var(--dim);
+      }
+      #log {
+        margin-top: 8px; max-height: 190px; min-height: 90px; overflow-y: auto; font-size: 11px;
+        color: #8888a0; white-space: pre-wrap; border-top: 1px solid var(--line); padding-top: 8px;
+      }
+      #result { margin-top: 12px; padding: 10px; border: 1px solid #3d5285; background: #16203a; border-radius: 4px; font-size: 12px; }
+
+      /* touch controls: only on coarse pointers */
+      #touch { position: absolute; inset: auto 0 0 0; display: none; justify-content: space-between; padding: 12px calc(14px + env(safe-area-inset-right)) calc(14px + env(safe-area-inset-bottom)) calc(14px + env(safe-area-inset-left)); pointer-events: none; }
+      #touch .pad { display: grid; grid-template-columns: repeat(3, 54px); grid-template-rows: repeat(2, 54px); gap: 6px; pointer-events: auto; }
+      #touch .acts { display: flex; gap: 10px; align-items: flex-end; pointer-events: auto; }
+      #touch button {
+        width: 54px; height: 54px; border-radius: 12px; border: 1px solid #2e2e38;
+        background: rgba(27,27,34,.82); color: var(--ink); font: inherit; font-size: 13px;
+        display: grid; place-items: center; user-select: none; touch-action: none;
+      }
+      #touch button:active { background: rgba(60,74,110,.95); }
+      #touch .up { grid-column: 2; grid-row: 1; }
+      #touch .left { grid-column: 1; grid-row: 2; }
+      #touch .down { grid-column: 2; grid-row: 2; }
+      #touch .right { grid-column: 3; grid-row: 2; }
+      #touch .hit { width: 68px; height: 68px; border-radius: 50%; background: rgba(120,40,40,.8); }
+      #touch .grab { width: 58px; height: 58px; border-radius: 50%; background: rgba(40,70,120,.8); }
+      @media (pointer: coarse) { #touch { display: flex; } }
+
+      /* overlays */
+      .overlay { position: fixed; inset: 0; display: grid; place-items: center; padding: 24px; background: rgba(6,6,8,.86); z-index: 20; }
+      .overlay[hidden] { display: none; }
+      .card { max-width: 520px; width: 100%; background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 22px; }
+      .card h1 { font-size: 18px; margin: 0 0 6px; letter-spacing: .02em; }
+      .card p { color: var(--dim); font-size: 13px; margin: 0 0 12px; }
+      .card ul { color: var(--dim); font-size: 13px; padding-left: 18px; margin: 0 0 16px; }
+      .card code { color: #a8c7ff; }
+      .card button { padding: 10px 16px; border-radius: 5px; border: 1px solid #3d5285; background: #2c3a5e; color: var(--ink); font: inherit; cursor: pointer; }
+      .card button:hover { background: #35476f; }
+      .card button:focus-visible, #touch button:focus-visible { outline: 2px solid #7aa2ff; outline-offset: 2px; }
+      #fatal pre { white-space: pre-wrap; font-size: 11px; color: #ff9b9b; max-height: 160px; overflow: auto; }
+
+      .sr { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+
+      @media (max-width: 860px) {
+        #app { grid-template-columns: 1fr; grid-template-rows: 58vh 1fr; }
+        #hud { border-left: 0; border-top: 1px solid var(--line); padding: 12px calc(12px + env(safe-area-inset-right)) calc(12px + env(safe-area-inset-bottom)) calc(12px + env(safe-area-inset-left)); }
+        #log { max-height: 110px; min-height: 60px; }
+        h2 { margin: 12px 0 6px; }
+      }
+      @media (prefers-reduced-motion: reduce) { .bar > i { transition: none; } }
     </style>
   </head>
   <body>
+    <a class="sr" href="#hud">Skip to match status</a>
     <div id="app">
       <div id="viewport"></div>
-      <div id="hud"></div>
+      <div id="hud" tabindex="-1"></div>
     </div>
+
+    <noscript>
+      <div class="overlay">
+        <div class="card">
+          <h1>JavaScript required</h1>
+          <p>This game runs its simulation in your browser. Enable JavaScript to play.</p>
+        </div>
+      </div>
+    </noscript>
+
+    <div id="intro" class="overlay" hidden>
+      <div class="card" role="dialog" aria-modal="true" aria-labelledby="intro-title">
+        <h1 id="intro-title">WR3D</h1>
+        <p>A deterministic 3D wrestling sim. Same mechanics core the Roblox build runs.</p>
+        <ul>
+          <li><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> move · <kbd>J</kbd> strike · <kbd>K</kbd> grapple · <kbd>R</kbd> rematch</li>
+          <li>Strikes only land inside the cone in front of you — face your opponent</li>
+          <li>Deplete health to win. Poise decides knockdowns</li>
+        </ul>
+        <button id="intro-go">Start match</button>
+      </div>
+    </div>
+
+    <div id="fatal" class="overlay" hidden>
+      <div class="card" role="alertdialog" aria-labelledby="fatal-title">
+        <h1 id="fatal-title">Something broke</h1>
+        <p>The simulation hit an error. Your browser details are below — nothing was sent anywhere.</p>
+        <pre id="fatal-msg"></pre>
+        <button id="fatal-reload">Reload</button>
+      </div>
+    </div>
+
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>
