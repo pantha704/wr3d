@@ -5,7 +5,7 @@ shared by a browser build and a Roblox build.
 
 **[▶ Play in the browser](https://pantha704.github.io/wr3d/)** *(live after first deploy)*
 
-![grey-box](docs/greybox-screenshot.png)
+![playable](docs/playable.png)
 
 ## What makes this different
 
@@ -15,7 +15,7 @@ lines, 271 citations), and both the TypeScript and Luau implementations must
 reproduce the same conformance suite:
 
 ```bash
-pnpm --dir web test                        # 13 tests, 210 vectors
+pnpm --dir web test                        # 17 tests, 210 vectors
 lune run roblox/tests/conformance.luau     # 213 assertions, same vectors
 ```
 
@@ -63,8 +63,8 @@ python3 tools/gen_vectors.py             # regenerate conformance vectors
 | Mechanics spec | ✅ 271 citations |
 | Sim core (web + Luau) | ✅ conformance green |
 | Original roster | ✅ 300 generated wrestlers |
-| Playable match | 🚧 next |
-| Public deploy | 🚧 workflow ready |
+| Playable match | ✅ keyboard + AI, deterministic (17 tests) |
+| Public deploy | 🚧 workflow ready, waiting on remote |
 | Art pass | 🚧 capsules |
 
 Roadmap, risk register and quality gates: [`docs/PLAN.md`](docs/PLAN.md).

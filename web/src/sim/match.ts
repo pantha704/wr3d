@@ -39,12 +39,18 @@ export interface Fighter {
   downTimer: number;
   special: number;
   knockedDown: boolean;
+  /** arena position, metres; the sim owns these, the renderer only reads them */
+  x: number;
+  z: number;
+  /** radians, 0 = +X */
+  facing: number;
 }
 
 export const POISE_START = 1000;
 
 export function createFighter(init: FighterInit): Fighter {
   const maxHealth = healthPool(init.optLength ?? DEFAULT_OPT_LENGTH, init.charHealth ?? 100);
+  const side = init.id % 2 === 1 ? -1 : 1;
   return {
     id: init.id,
     name: init.name,
@@ -56,6 +62,9 @@ export function createFighter(init: FighterInit): Fighter {
     downTimer: 0,
     special: 0,
     knockedDown: false,
+    x: side * 1.6,
+    z: 0,
+    facing: side === -1 ? 0 : Math.PI,
   };
 }
 
